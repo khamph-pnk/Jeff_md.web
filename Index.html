@@ -1,0 +1,52 @@
+<!-- ====== FILE UPLOAD SECTION ====== -->
+<div style="margin-top: 30px; padding: 20px; border: 2px dashed #ccc;">
+    <h3>📁 Upload Your Picture</h3>
+    
+    <!-- User selects a file -->
+    <input type="file" id="userFile" accept="image/jpeg, image/png">
+    <br><br>
+    
+    <!-- Button to upload -->
+    <button onclick="uploadFile()">Upload to Bot</button>
+    
+    <p id="uploadStatus" style="margin-top: 10px;"></p>
+</div>
+
+<script>
+// Function to handle file upload
+async function uploadFile() {
+    const fileInput = document.getElementById('userFile');
+    const statusDisplay = document.getElementById('uploadStatus');
+    
+    if (!fileInput.files[0]) {
+        statusDisplay.textContent = "Please select a file first.";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    statusDisplay.textContent = "Uploading...";
+
+    try {
+        // Send to your backend endpoint
+        const response = await fetch('/upload-media', {
+            method: 'POST',
+            body: formData  // Headers are set automatically for FormData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            statusDisplay.innerHTML = `✅ Success! Your file is on WhatsApp servers.<br>
+                                       <small>Media ID: ${result.mediaId}</small><br>
+                                       Go back to WhatsApp and type <code>!sendimage</code> to receive it.`;
+        } else {
+            statusDisplay.textContent = `❌ Error: ${result.error}`;
+        }
+    } catch (error) {
+        statusDisplay.textContent = "❌ Network error. Is the server running?";
+        console.error(error);
+    }
+}
+</script>

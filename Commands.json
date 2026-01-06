@@ -1,0 +1,6 @@
+{
+  "!menu": "Commands: !info, !upload, !sendimage, !pair",
+  "!upload": "Get a link to upload your picture.",
+  "!sendimage": "Receive your uploaded picture.",
+  "!pair": "Link your device with a code."
+}
